@@ -10,6 +10,9 @@ import * as path from 'path';
 import { BusinessListingController } from './business-listing.controller';
 import { BusinessListingService } from './business-listing.service';
 import { BusinessListing } from './entities/business-listing.entity';
+import { Review } from './entities/review.entity';
+import { ReviewController } from './review.controller';
+import { ReviewService } from './review.service';
 
 @Module({
   imports: [
@@ -23,9 +26,9 @@ import { BusinessListing } from './entities/business-listing.entity';
       entities: [path.join(__dirname, 'entities', '*.entity{.ts,.js}')],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, BusinessListing]),
+    TypeOrmModule.forFeature([User, BusinessListing, Review]),
   ],
-  controllers: [UserController, BusinessListingController],
-  providers: [UserService, BusinessListingService],
+  controllers: [UserController, BusinessListingController, ReviewController],
+  providers: [UserService, BusinessListingService, ReviewService],
 })
 export class AppModule {}

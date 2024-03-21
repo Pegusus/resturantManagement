@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException('Token expired');
       }
       if (!this.allowedRoles.includes(decoded.role as Role)) {
-        throw new UnauthorizedException('Unauthorized');
+        throw new UnauthorizedException('Unauthorized Role');
       }
       req.user = decoded as User;
       return true;

@@ -17,15 +17,24 @@ export class BusinessListingService {
     private businessListingRepository: Repository<BusinessListing>,
   ) {}
 
+  async findById(id: number): Promise<BusinessListing> {
+    return await this.businessListingRepository.findOneBy({id});
+  }
+
   async findAll(): Promise<BusinessListing[]> {
-    return this.businessListingRepository.find();
+    return await this.businessListingRepository.createQueryBuilder('businessListing')
+      .leftJoinAndSelect('businessListing.reviews', 'reviews')
+      .orderBy('reviews.updatedAt', 'DESC')
+      .getMany();
   }
 
   async findByUserIdAndId(
     userId: number,
     id: number,
   ): Promise<BusinessListing | undefined> {
-    return this.businessListingRepository.findOne({ where: { userId, id } });
+    return this.businessListingRepository.findOne({ where: { userId, id }, relations: {
+      reviews: true,
+  }, });
   }
 
   async create(
@@ -39,7 +48,9 @@ export class BusinessListingService {
   }
 
   async findByUserId(userId: number): Promise<BusinessListing[]> {
-    return this.businessListingRepository.find({ where: { userId } });
+    return this.businessListingRepository.find({ where: { userId }, relations: {
+      reviews: true,
+  }, });
   }
 
   async update(
@@ -87,5 +98,22 @@ export class BusinessListingService {
     }
 
     await this.businessListingRepository.delete(id);
+  }
+
+  async updateOverallRating(businessListingId: number): Promise<void> {
+    const businessListing = await this.businessListingRepository.findOne({where: {id: businessListingId}, relations: {
+      reviews: true,
+  }});
+
+    if (!businessListing) {
+      throw new Error('Business listing not found');
+    }
+
+    const totalRating = businessListing.reviews.reduce((acc, review) => acc + review.rating, 0);
+    const averageRating = totalRating / businessListing.reviews.length;
+
+    businessListing.overallRating = averageRating;
+
+    await this.businessListingRepository.save(businessListing);
   }
 }
