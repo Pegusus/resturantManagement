@@ -18,7 +18,7 @@ import { ReviewService } from './review.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host:  'localhost', // 'resturantmanagement-postgres-1',
+      host:  'resturantmanagement-postgres-1',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
