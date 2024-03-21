@@ -30,6 +30,7 @@ export class AuthGuard implements CanActivate {
       if (expirationTime && expirationTime < Date.now()) {
         throw new UnauthorizedException('Token expired');
       }
+      console.log(this.allowedRoles);
       if (!this.allowedRoles.includes(decoded.role as Role)) {
         throw new UnauthorizedException('Unauthorized Role');
       }

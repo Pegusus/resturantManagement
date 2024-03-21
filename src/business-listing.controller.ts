@@ -58,7 +58,7 @@ export class BusinessListingController {
   }
 
   @Delete('/:id')
-  @UseGuards(new AuthGuard([Role.BUSINESS_OWNER, Role.ADMIN]))
+  @UseGuards(new AuthGuard([Role.ADMIN]))
   async deleteBuinessListing(@Req() req: Request, @Res() res: Response) {
     const { id } = req.params;
     const decodedUser: User = (req as any).user;
