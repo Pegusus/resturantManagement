@@ -7,8 +7,12 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if exists) to the working directory
 COPY package*.json ./
 
+COPY .env ./
+
 # Install dependencies
 RUN npm install
+
+RUN npm install bcryptjs --save
 
 # Copy the rest of the application code
 COPY . .
@@ -17,4 +21,4 @@ COPY . .
 EXPOSE 3000
 
 # Command to run your NestJS application
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "dev"]
